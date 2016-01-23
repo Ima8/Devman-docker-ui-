@@ -15,14 +15,14 @@ gulp.task('css', function() {
     .pipe(gulp.dest('./public/css/'))
 });
 
-gulp.task('html', function() {
-  console.log("Hey html");
-  return gulp.src(['./src/html/*.html'])
-    .pipe(htmlmin({
-      collapseWhitespace: true
-    }))
-    .pipe(gulp.dest('./public/'));
-});
+// gulp.task('html', function() {
+//   console.log("Hey html");
+//   return gulp.src(['./src/html/*.html'])
+//     .pipe(htmlmin({
+//       collapseWhitespace: true
+//     }))
+//     .pipe(gulp.dest('./public/'));
+// });
 
 gulp.task('nodemon', function (cb) {
 
@@ -48,10 +48,10 @@ gulp.task('browser-sync', ['nodemon'], function() {
 	});
 });
 
-gulp.task('default', ['css', 'html', 'browser-sync'], function() {
+gulp.task('default', ['css', 'browser-sync'], function() {
   gulp.watch('./src/scss/**/*.scss', ['css']);
-  gulp.watch('./src/html/*.html', ['html']);
-  gulp.watch(['./src/html/*.html'], browserSync.reload);
+  // gulp.watch('./src/html/*.html', ['html']);
+  // gulp.watch(['./src/html/*.html'], browserSync.reload);
   gulp.watch(['./public/css/**/*.css'], browserSync.reload);
   // server.start(['bin/www']);
 });
