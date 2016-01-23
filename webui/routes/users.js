@@ -2,19 +2,19 @@ var express = require('express');
 var router = express.Router();
 
 var mongoose = require('mongoose')
- , models = require('../models/user.js');
-var db = mongoose.connect("mongodb://localhost/test")
-    ,User = mongoose.model("Users");
+var models = require('../models/user.js');
+var db = mongoose.connect("mongodb://localhost/test");
+var User = mongoose.model("Users");
 
 var crypto = require('crypto');
 var keyHash = require('../config/dev.js').keyHash;
 
-var session = require('express-session');
+// var session = require('express-session');
 
 
 
 router.post('/login',function(req,res,next){
-  var userName =  req.body.username;
+  var userName =  req.body.userName;
   var password = req.body.password;
 
   if(userName!=null&&password!=null){
@@ -36,6 +36,7 @@ router.post('/login',function(req,res,next){
       //    if(err) throw err;
       //    console.log("username in request >>> "+sess.username);
       //  });
+
        return res.json({message:'DONE'});
      }else{
        return res.json({message:'Password BAD!'});
@@ -79,10 +80,10 @@ router.get('/list', function(req, res, next) {
 router.post('/addNew',function(req,res,next){
   var userName = req.body.userName;
   var password = req.body.password;
-  var hash = crypto.createHmac('sha512', keyHash);
-  hash.update(password);
-  var password = hash.digest('hex');
   if(userName!=null&&password!=null){
+    var hash = crypto.createHmac('sha512', keyHash);
+    hash.update(password);
+    var password = hash.digest('hex');
     var user = new User({
       username: userName,
       password: password
@@ -92,13 +93,14 @@ router.post('/addNew',function(req,res,next){
              if (err) throw err;
              console.log("My new User is saved",
                "`save` hook worked as espected since we had no errors here");
-               res.send(user)
+               res.send(user);
     });
   }else{
     res.json({message:'Username or Password is null!!'});
   }
 
 });
+
 module.exports = router;
 
 

@@ -29,17 +29,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // session
 // app.set('trust proxy', 1) // trust first proxy
-app.use(session({
-  secret: 'keyboard_cat',
-  resave: true,
-  saveUninitialized: true,
-  cookie: { secure: true },
-  store: new FileStore()
-}));
-app.use(function printSession(req, res, next) {
-  console.log('req.session', req.session);
-  return next();
-});
+// app.use(session({
+//   secret: 'keyboard_cat',
+//   resave: true,
+//   saveUninitialized: true,
+//   cookie: { secure: true },
+//   store: new FileStore()
+// }));
+// app.use(function printSession(req, res, next) {
+//   console.log('req.session', req.session);
+//   return next();
+// });
 app.use('/', routes);
 app.use('/users', users);
 app.use('/remote',remote);
