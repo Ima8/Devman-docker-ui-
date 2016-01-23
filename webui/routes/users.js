@@ -5,16 +5,30 @@ var mongoose = require('mongoose')
  , models = require('../models/user.js');
 var db = mongoose.connect("mongodb://localhost/test")
     ,User = mongoose.model("Users");
-/* GET users listing. */
-router.get('/users', function(req, res, next) {
 
-  res.send('respond with a resource');
+var crypto = require('crypto');
+var keyHash = require('../config/dev.js').keyHash;
+/* GET users listing. */
+router.get('/list', function(req, res, next) {
+  User.find({},function (err, users) {
+    if (err) return handleError(err);
+      listUser = [];
+      users.forEach(function(user) {
+            console.log('%s password is a %s.', user.username,user.password);
+            //var temp = {user.usersname,user.password};
+            listUser.push(user);
+          });
+      res.json(listUser);
+  });
 
 });
 
 router.post('/addNew',function(req,res,next){
   var userName = req.body.userName;
   var password = req.body.password;
+  var hash = crypto.createHmac('sha512', keyHash);
+  hash.update(password);
+  password = hash.digest('hex');
   if(userName!=null&&password!=null){
     var user = new User({
       username: userName,
