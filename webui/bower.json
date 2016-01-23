@@ -1,0 +1,19 @@
+{
+  "name": "webui",
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "https://github.com/gasileer/Devman",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bootstrap": "~3.3.6",
+    "jquery-ui": "~1.11.4"
+  }
+}
