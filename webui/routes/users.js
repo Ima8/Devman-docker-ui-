@@ -81,20 +81,28 @@ router.post('/addNew',function(req,res,next){
   var userName = req.body.userName;
   var password = req.body.password;
   if(userName!=null&&password!=null){
-    var hash = crypto.createHmac('sha512', keyHash);
-    hash.update(password);
-    var password = hash.digest('hex');
-    var user = new User({
-      username: userName,
-      password: password
-      });
+    User.findOne({username:userName}, function(err, data){
+      if(!data){
+        var hash = crypto.createHmac('sha512', keyHash);
+        var hashPassword = password;
+        hash.update(hashPassword);
+        hashPassword = hash.digest('hex');
+        var user = new User({
+          username: userName,
+          password: hashPassword
+          });
 
-    user.save(function (err, model) {
-             if (err) throw err;
-             console.log("My new User is saved",
-               "`save` hook worked as espected since we had no errors here");
-               res.send(user);
+        user.save(function (err, model) {
+                 if (err) throw err;
+                 console.log("My new User is saved",
+                   "`save` hook worked as espected since we had no errors here");
+                   res.send(user);
+        });
+      }else{
+        res.json({message:'Account Duplicate'});
+      }
     });
+
   }else{
     res.json({message:'Username or Password is null!!'});
   }

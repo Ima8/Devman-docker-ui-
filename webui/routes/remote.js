@@ -22,38 +22,89 @@ router.post('/createServer', function(req, res, next) {
 
     //Add data to db
   if(userName!=null&&ipaddress!=null&&ports!=null){
-    var server = new Servers({
-      username: userName,
-      ip: ipaddress,
-      port: ports
-      });
-    server.save(function(err){
-          if(err) {
-              console.error('ERROR!');
+
+    Servers.findOne({ip:ipaddress}, function(err, data){
+        if(err){throw err}
+        console.log(data);
+        if(!data){
+          var server = new Servers({
+            username: userName,
+            ip: ipaddress,
+            port: ports
+            });
+          server.save(function(err){
+                if(err) {
+                    console.error('ERROR!');
+                }else{
+                  res.json({message:'DONE'});
+                }
+            });
+
           }else{
-            /// after create server maybe you want to check or something
-
-            // remote to client server
-            // var args = {
-            // 	data: { userName: username, password: password ,command:command },
-            // 	headers: { "Content-Type":  "application/x-www-form-urlencoded" }
-            // };
-            // client.post("http://13.67.52.91:9999", args, function (data, response) {
-            // 	// parsed response body as js object
-            // 	console.log(data);
-            //   res.send(data);
-            // });
-            res.json({message:'DONE'});
+            res.json({message:'IP Duplicate'});
           }
-      });
 
-    }else{
-      res.json({message:'WTF ip or port'});
-    }
 
+    });
+
+  }
 });
 
 router.post('/createComponent', function(req, res, next) {
+  var ipaddress = req.body.ipaddress;
+  var component = "";//["xxx","yyy"]
+  var command = "";
+
+  /// Gen Code
+
+
+
+  //Add Data to db && get IP
+  Servers.findOne({ip:ipaddress}, function(err, data){
+      if(err){throw err}
+
+      var ip_c = data.ip;
+      var port_c = data.port;
+
+      console.log("ip_c + "+ip_c);
+      console.log("port + "+port_c);
+      for(c in component){
+        data.components.push = {name:c,
+                                status:"DONE"}
+      }
+      data.save(function (err) {
+          if(err) {
+              console.error('ERROR!');
+          }else{
+
+            // remote to client server
+            var ip = new Buffer(ip_c+"").toString('base64');
+            var port = new Buffer(port_c+"").toString('base64');
+            var command = new Buffer(command+"").toString('base64');
+            var text = ip+" "+port+" "+command;
+            //res.send("DONE");
+            var args = {
+              data: {text},
+              headers: { "Content-Type":  "application/x-www-form-urlencoded" }
+            };
+
+            //128.199.94.82 port 1337
+            console.log("Hey");
+            client.post("http://128.199.93.151:7331", args, function (data, response) {
+              // parsed response body as js object
+              console.log(data);
+              res.send(data);
+            });
+            return res.send("END");
+          }
+      });
+
+  });
+
+});
+
+////
+router.post('/createLink', function(req, res, next) {
   var ipaddress = req.body.ipaddress;
   var component = "";//["xxx","yyy"]
   var command = "";
@@ -76,7 +127,7 @@ router.post('/createComponent', function(req, res, next) {
           }else{
 
             // remote to client server
-            
+
             res.send("DONE");
             // var args = {
             //   data: { account: account, command:command },
@@ -96,7 +147,7 @@ router.post('/createComponent', function(req, res, next) {
 });
 
 
-router.get('/delete',function(req,res,next){
+router.post('/delete',function(req,res,next){
   //Delete data from db
   // remote to delete docker
   res.send('respond with a /create');
