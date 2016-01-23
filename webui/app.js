@@ -9,6 +9,8 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var remote = require('./routes/remote');
 var session = require('express-session');
+var mongoose = require('mongoose');
+var FileStore = require('session-file-store')(session);
 
 var app = express();
 
@@ -26,14 +28,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // session
-app.set('trust proxy', 1) // trust first proxy
+// app.set('trust proxy', 1) // trust first proxy
 app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
+  secret: 'keyboard_cat',
+  resave: true,
   saveUninitialized: true,
-  cookie: { secure: true }
-}))
-
+  cookie: { secure: true },
+  store: new FileStore()
+}));
+app.use(function printSession(req, res, next) {
+  console.log('req.session', req.session);
+  return next();
+});
 app.use('/', routes);
 app.use('/users', users);
 app.use('/remote',remote);

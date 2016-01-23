@@ -14,7 +14,7 @@ var session = require('express-session');
 
 
 router.post('/login',function(req,res,next){
-  var userName = req.body.userName;
+  var userName =  req.body.username;
   var password = req.body.password;
 
   if(userName!=null&&password!=null){
@@ -24,27 +24,41 @@ router.post('/login',function(req,res,next){
 
     User.findOne({'username': userName}, function(err, data){
      if(data.password==password){
-       req.session.username=data.username;
-       console.log("username >>> "+req.session.username);
-       res.json({message:'DONE'});
+      //  sess = req.session;
+      //  sess.username=data.username;
+      //  sess.cookie.maxAge = 60000;
+      var hash = crypto.createHmac('sha512', keyHash);
+      hashUser = data.username;
+      hash.update(hashUser);
+      hashUser = hash.digest('hex');
+       res.cookie("username", hashUser, { expires: new Date(Date.now() + 1000 * 60 * 10), httpOnly: true });
+      //  sess.save(function(err) {
+      //    if(err) throw err;
+      //    console.log("username in request >>> "+sess.username);
+      //  });
+       return res.json({message:'DONE'});
      }else{
-       res.json({message:'Password BAD!'});
+       return res.json({message:'Password BAD!'});
      }
     });
   }else{
-    res.json({message:'Username or Password is null!!'});
+    return res.json({message:'Username or Password is null!!'});
   }
 
 });
 
 router.post('/logout',function(req,res,next){
-  req.session=null;
+  return  req.session=null;
 
 });
 
 router.get('/checkLogin',function(req,res,next){
-  //res.send(express().session());
-  console.log(express.session());
+  console.log(req.cookies.username);
+  if(req.cookies.username){
+    res.send(req.cookies.username);
+  }else{
+    return res.send(" Don't have session");
+  }
 });
 
 /* GET users listing. */
@@ -57,7 +71,7 @@ router.get('/list', function(req, res, next) {
             //var temp = {user.usersname,user.password};
             listUser.push(user);
           });
-      res.json(listUser);
+    return  res.json(listUser);
   });
 
 });
