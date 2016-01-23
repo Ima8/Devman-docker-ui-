@@ -3,25 +3,72 @@
    <head>
       <meta charset="utf-8">
       <title>HTML</title>
+
+      <!-- CSS -->
+      <!-- <link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet"> -->
+      <link rel="stylesheet" href="components/jquery-ui/themes/pepper-grinder/jquery-ui.css">
+      <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
       <link rel="stylesheet" href="css/style.css">
-      <link rel="stylesheet" href="app/source/bootstrap/dist/css/bootstrap.min.css">
+
+      <!-- Script -->
+      <script src="components/jquery/dist/jquery.js" charset="utf-8"></script>
+      <script src="components/jquery-ui/jquery-ui.js" charset="utf-8"></script>
    </head>
    <body>
       <div id="wrapper">
-         <ui>
-            <li class="draggable"><a href="">1</a></li>
-            <li class="draggable"><a href="">2</a></li>
-            <li class="draggable"><a href="">3</a></li>
-            <li class="draggable"><a href="">4</a></li>
-            <li class="draggable"><a href="">5</a></li>
-         </ui>
+         <div class="container">
+            <div class="row">
+               <div class="col-md-3">
+                  <div id="accordion">
+                     <!-- section 1 -->
+                     <h3>Web Server</h3>
+                     <div>
+                        <ul>
+                           <li>
+                              <a href="#"><img src="img/apache-logo.png" alt="" />Apache</a>
+                           </li>
+                           <li>
+                              <a href="#"><img src="img/php-logo.png" alt="" />PHP5</a>
+                           </li>
+                           <li>
+                              <a href="#"><img src="img/mysql-logo.png" alt="" />MySql</a>
+                           </li>
+                           <li>
+                              <a href="#"><img src="img/myad-logo.png" alt="" />PhpMyadmin</a>
+                           </li>
+                        </ul>
+                     </div>
+                     <h3>Game Engine</h3>
+                     <div>
+                        <ul>
+                           <li><a href="#">Apache</a></li>
+                           <li><a href="#">PHP5</a></li>
+                           <li><a href="#">MySql</a></li>
+                           <li><a href="#">PhpMyadmin</a></li>
+                        </ul>
+                     </div>
+                     <h3>Operating System</h3>
+                     <div>
+                        <ul>
+                           <li><a href="#">Apache</a></li>
+                           <li><a href="#">PHP5</a></li>
+                           <li><a href="#">MySql</a></li>
+                           <li><a href="#">PhpMyadmin</a></li>
+                        </ul>
+                     </div>
+                  </div>
+                  <!-- /.accordion -->
+               </div>
+               <!-- /.col-md-3 -->
+               <div class="col-md-9 droparea">
+                     
+               </div>
+            </div>
+         </div>
       </div>
-      <script src="bower_components/jquery/dist/jquery.min.js" charset="utf-8"></script>
-      <script src="bower_components/jquery-ui/jquery-ui.min.js" charset="utf-8"></script>
-      <script type="text/javascript">
-         $(function(){
-            $(".draggable").draggable();
-         })
-      </script>
+
+      <!-- Scripts  -->
+      <script src="js/app.js" charset="utf-8"></script>
+      <script src="components/bootstrap/dist/js/bootstrap.min.js" charset="utf-8"></script>
    </body>
 </html>
