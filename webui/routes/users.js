@@ -8,13 +8,52 @@ var db = mongoose.connect("mongodb://localhost/test")
 
 var crypto = require('crypto');
 var keyHash = require('../config/dev.js').keyHash;
+
+var session = require('express-session');
+
+
+
+router.post('/login',function(req,res,next){
+  var userName = req.body.userName;
+  var password = req.body.password;
+
+  if(userName!=null&&password!=null){
+    var hash = crypto.createHmac('sha512', keyHash);
+    hash.update(password);
+    password = hash.digest('hex');
+
+    User.findOne({'username': userName}, function(err, data){
+     if(data.password==password){
+       req.session.username=data.username;
+       console.log("username >>> "+req.session.username);
+       res.json({message:'DONE'});
+     }else{
+       res.json({message:'Password BAD!'});
+     }
+    });
+  }else{
+    res.json({message:'Username or Password is null!!'});
+  }
+
+});
+
+router.post('/logout',function(req,res,next){
+  req.session=null;
+
+});
+
+router.get('/checkLogin',function(req,res,next){
+  //res.send(express().session());
+  console.log(express.session());
+});
+
 /* GET users listing. */
 router.get('/list', function(req, res, next) {
   User.find({},function (err, users) {
     if (err) return handleError(err);
       listUser = [];
       users.forEach(function(user) {
-            console.log('%s password is a %s.', user.username,user.password);
+            //console.log('%s password is a %s.', user.username,user.password);
             //var temp = {user.usersname,user.password};
             listUser.push(user);
           });
@@ -28,7 +67,7 @@ router.post('/addNew',function(req,res,next){
   var password = req.body.password;
   var hash = crypto.createHmac('sha512', keyHash);
   hash.update(password);
-  password = hash.digest('hex');
+  var password = hash.digest('hex');
   if(userName!=null&&password!=null){
     var user = new User({
       username: userName,
@@ -42,7 +81,7 @@ router.post('/addNew',function(req,res,next){
                res.send(user)
     });
   }else{
-    res.send("Username or Password is null!!")
+    res.json({message:'Username or Password is null!!'});
   }
 
 });
