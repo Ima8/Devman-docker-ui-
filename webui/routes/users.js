@@ -31,13 +31,13 @@ router.post('/login',function(req,res,next){
       hashUser = data.username;
       hash.update(hashUser);
       hashUser = hash.digest('hex');
-       res.cookie("username", hashUser, { expires: new Date(Date.now() + 1000 * 60 * 10), httpOnly: true });
+      res.cookie("username", hashUser, { expires: new Date(Date.now() + 1000 * 60 * 10), httpOnly: true });
       //  sess.save(function(err) {
       //    if(err) throw err;
       //    console.log("username in request >>> "+sess.username);
       //  });
 
-       return res.json({message:'DONE'});
+       res.redirect("../");
      }else{
        return res.json({message:'Password BAD!'});
      }
@@ -48,9 +48,9 @@ router.post('/login',function(req,res,next){
 
 });
 
-router.post('/logout',function(req,res,next){
-  return  req.session=null;
-
+router.get('/logout',function(req,res,next){
+  res.clearCookie('username');
+  res.redirect("/");
 });
 
 router.get('/checkLogin',function(req,res,next){

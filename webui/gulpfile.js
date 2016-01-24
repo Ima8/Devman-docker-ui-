@@ -45,13 +45,14 @@ gulp.task('browser-sync', ['nodemon'], function() {
         files: ["public/**/*.*"],
         basedir: ["./public"],
         port: 7000,
+        online:true
 	});
 });
 
-gulp.task('default', ['css', 'browser-sync'], function() {
-  gulp.watch('./src/scss/**/*.scss', ['css']);
+gulp.task('default', ['browser-sync'], function() {
+  //gulp.watch('./src/scss/**/*.scss', ['css']);
   // gulp.watch('./src/html/*.html', ['html']);
   // gulp.watch(['./src/html/*.html'], browserSync.reload);
-  gulp.watch(['./public/css/**/*.css'], browserSync.reload);
+//  gulp.watch(['./**/*.*'], browserSync.reload);
   // server.start(['bin/www']);
 });

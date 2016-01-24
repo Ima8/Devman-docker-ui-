@@ -53,7 +53,7 @@ router.post('/createServer', function(req, res, next) {
 router.post('/createComponent', function(req, res, next) {
   var ipaddress = req.body.ipaddress;
   var component = "";//["xxx","yyy"]
-  var command = "";
+  var command_c = req.body.command;
 
   /// Gen Code
 
@@ -68,20 +68,22 @@ router.post('/createComponent', function(req, res, next) {
 
       console.log("ip_c + "+ip_c);
       console.log("port + "+port_c);
+      console.log("command +"+command_c);
       for(c in component){
         data.components.push = {name:c,
                                 status:"DONE"}
       }
       data.save(function (err) {
           if(err) {
-              console.error('ERROR!');
+              return res.send("ERROR!");
           }else{
 
-            // remote to client server
+            // remote to client serve
             var ip = new Buffer(ip_c+"").toString('base64');
             var port = new Buffer(port_c+"").toString('base64');
-            var command = new Buffer(command+"").toString('base64');
+            var command = new Buffer(command_c+"").toString('base64');
             var text = ip+" "+port+" "+command;
+            console.log(command);
             //res.send("DONE");
             var args = {
               data: {text},
@@ -94,10 +96,8 @@ router.post('/createComponent', function(req, res, next) {
             client.post("http://128.199.93.151:7331", args, function (data, response) {
               // parsed response body as js object
               console.log(data);
-              res.send(data);
+              return res.send(data);
             });
-
-            return res.send("END");
           }
       });
 
