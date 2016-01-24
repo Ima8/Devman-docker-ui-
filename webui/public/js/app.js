@@ -1,11 +1,11 @@
 var containers = [];
+var images = [];
 $(function(){
    $(".sidebar li").draggable({
       helper:"clone"
    });
 
    var link = [] ;
-   var containers = [];
    var old_state = null;
    $(".selection").droppable({
       accept:'.sidebar li',
@@ -26,7 +26,12 @@ $(function(){
             location.reload();
          });
          $(".submit").click(function(){
-            alert("Hi");
+            console.log("clicked")
+            console.log(images);
+           $.post("/remote/createComponent",{ipaddress:"128.199.110.34",components: images}, function(data, status){
+               alert("Created !!");
+               console.log(data)
+           });
          });
 
          // 3
@@ -74,12 +79,14 @@ jsPlumb.ready(function(){
    var els = document.querySelectorAll(".app-draggable");
    jsPlumb.bind("connection", function(info) {
      //source
-      containers.target=info.target.dataset.images;
+
       console.log(containers);
 
       for(var i in containers){
-        console.log(containers[i]);
+        console.log(containers[i].image);
+        images.push(containers[i].image);
       }
+
       //console.log("source > "+info.source.dataset.images);
       //console.log("tager > "+info.target.dataset.images);
   });

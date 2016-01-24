@@ -20,19 +20,22 @@ router.post('/createServer', function(req, res, next) {
   var ipaddress = req.body.ipaddress;
   var ports = req.body.ports;
 
+  console.log(userName);
+  console.log(ipaddress);
+  console.log(ports);
     //Add data to db
   if(userName!=null&&ipaddress!=null&&ports!=null){
 
     Servers.findOne({ip:ipaddress}, function(err, data){
         if(err){throw err}
-        console.log(data);
+        console.log("data > "+data);
         if(!data){
           var server = new Servers({
             username: userName,
             ip: ipaddress,
             port: ports
             });
-          server.save(function(err){
+            server.save(function(err){
                 if(err) {
                     console.error('ERROR!');
                 }else{
@@ -41,10 +44,8 @@ router.post('/createServer', function(req, res, next) {
             });
 
           }else{
-            res.json({message:'IP Duplicate'});
+            res.json({message:'IP Duplicate or did not get data'});
           }
-
-
     });
 
   }
@@ -52,12 +53,14 @@ router.post('/createServer', function(req, res, next) {
 
 router.post('/createComponent', function(req, res, next) {
   var ipaddress = req.body.ipaddress;
-  var component = "";//["xxx","yyy"]
-  var command_c = req.body.command;
-
-  /// Gen Code
-
-
+  var component = req.body["components[]"];
+  var command_c = "";
+  console.log(req.body);
+  console.log("component : "+component);
+    /// Gen Code
+  for(c in component){
+      command_c  = "docker run -d --name "+c+ipaddress+" "+component[c];
+      console.log("command_c = "+command_c)
 
   //Add Data to db && get IP
   Servers.findOne({ip:ipaddress}, function(err, data){
@@ -83,7 +86,7 @@ router.post('/createComponent', function(req, res, next) {
             var port = new Buffer(port_c+"").toString('base64');
             var command = new Buffer(command_c+"").toString('base64');
             var text = ip+" "+port+" "+command;
-            console.log(command);
+            console.log("commmand 1 "+command);
             //res.send("DONE");
             var args = {
               data: {text},
@@ -93,16 +96,17 @@ router.post('/createComponent', function(req, res, next) {
             //128.199.94.82 port 1337
             console.log("Hey");
 
-            client.post("http://128.199.93.151:7331", args, function (data, response) {
+            client.post("http://128.199.155.221:7331", args, function (data, response) {
               // parsed response body as js object
               console.log(data);
-              return res.send(data);
+
             });
           }
       });
 
-  });
-
+    });
+  }
+  return res.send("DONE");
 });
 
 ////
