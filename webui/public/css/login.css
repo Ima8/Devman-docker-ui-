@@ -112,7 +112,7 @@ body {
 }
 
 .container {
-  margin: 140px auto;
+  margin: 0 auto;
   width: 640px;
 }
 
@@ -266,4 +266,31 @@ input[type=submit]:active {
 
 .lt-ie9 input[type=text], .lt-ie9 input[type=password] {
   line-height: 34px;
+}
+
+.login-help a:hover {
+   text-decoration: none;
+   transition: all .5s ease;
+}
+
+/*#top-image {
+background-image: url("http://hacknroll.nushackers.org/images/pic1.jpg");
+position:fixed ;
+padding-top: 180px;
+top:0;
+width:100%;
+z-index:0;
+  height:100%;
+  background-size: calc(100% + 50px);
+}*/
+
+#top-image {
+background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),url('http://hacknroll.nushackers.org/images/pic1.jpg') -25px -50px;
+position:fixed ;
+padding-top: 180px;
+top:0;
+width:100%;
+z-index:0;
+  height:100%;
+  background-size: calc(100% + 50px);
 }

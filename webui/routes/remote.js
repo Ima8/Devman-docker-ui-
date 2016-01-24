@@ -59,7 +59,8 @@ router.post('/createComponent', function(req, res, next) {
   console.log("component : "+component);
     /// Gen Code
   for(c in component){
-      command_c  = "docker run -d --name "+c+ipaddress+" "+component[c];
+     var id = parseInt(Math.random() * (100000 - 1) + 1);
+      command_c  = "docker run -d --name "+component[c]+id+" "+component[c];
       console.log("command_c = "+command_c)
 
   //Add Data to db && get IP
